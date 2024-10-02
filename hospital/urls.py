@@ -14,9 +14,34 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+    path("", include("api.urls")),
+    path("diagnosis", include("api.urls")),
+    path("patients", include("api.urls")),
+    path("doctor_contact", include("api.urls")),
+    path("total", include("api.urls")),
+    path("nurse_presp", include("api.urls")),
+    path("average_age", include("api.urls")),
+    path("latest_patient", include("api.urls")),
+    path("busy_doctors", include("api.urls")),
+    path("long_term_patients", include("api.urls")),
+    path("nurse_patient_count", include("api.urls")),
+    path("patients_by_doctor", include("api.urls")),
+    path("specialization", include("api.urls")),
+    path("patients_by_specialization", include("api.urls")),
+    path("unassigned_nurses", include("api.urls")),
+    path("latest_medical_record", include("api.urls")),
+    path("patients_with_diagnosis", include("api.urls")),
+    path("doctors_by_age_group", include("api.urls")),
+    path("patients_with_prescription", include("api.urls")),
+    path("nurses_by_patient_age", include("api.urls")),
+    path("total_medical_records", include("api.urls")),
+    path("patients_by_nurse_contact", include("api.urls")),
+    path("patients_with_multiple_doctors", include("api.urls")),
+    path("doctors_by_prescription", include("api.urls")),
 ]

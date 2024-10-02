@@ -24,7 +24,7 @@ from typing import (
 )
 
 from . import filesize, get_console
-from .console import Console, JustifyMethod, RenderableType, Group
+from .console import Console, Group, JustifyMethod, RenderableType
 from .highlighter import Highlighter
 from .jupyter import JupyterMixin
 from .live import Live

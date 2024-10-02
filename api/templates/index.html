@@ -1,0 +1,444 @@
+{% extends "base.html"%}
+
+{% block title %}Hospital Management System | Home{% endblock %}
+
+{% block content %}
+
+
+<h2>Total Patients</h2>
+<p>Total number of patients: {{ total }}</p>
+
+<h2>Patients</h2>
+
+<form action="/" method="post">
+    <label for="date">Enter Date: </label>
+    <input id="date" type="date" name="date" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+<table border='1'>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+    </tr>
+    {% for x in patients %}
+    <tr>
+        <td>{{ x.id }}</td>
+        <td>{{ x.name }}</td>
+        <td>{{ x.age }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<h2>Doctors</h2>
+
+<form action="/diagnosis" method="post">
+    {% csrf_token %}
+    <label for="diagnosis">Enter Diagnosis: </label>
+    <input id="diagnosis" type="text" name="diagnosis" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+<table border='1'>
+    <tr>
+        <th>Name</th>
+    </tr>
+    {% for doctor in doctors %}
+    <tr>
+        <td>{{ doctor }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Nurses</h2>
+
+<form action="/patients" method="post">
+    {% csrf_token %}
+    <label for="nurse_id">Select Nurse: </label>
+    <select id="nurse_id" name="nurse_id">
+        <option value="">--Select Nurse--</option>
+        {% for nurse in nurses %}
+        <option value="{{ nurse.id }}">{{ nurse.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Search" />
+</form>
+
+<table border='1'>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+    </tr>
+    {% for patient in nurse_patients %}
+    <tr>
+        <td>{{ patient.id }}</td>
+        <td>{{ patient.name }}</td>
+        <td>{{ patient.age }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<h2>Doctor Contact Numbers</h2>
+
+<form action="/contacts" method="post">
+    {% csrf_token %}
+    <label for="patient_id">Select Patient: </label>
+    <select id="patient_id" name="patient_id">
+        <option value="">--Select Patient--</option>
+        {% for patient in patient_doc %}
+        <option value="{{ patient.id }}">{{ patient.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Get Contact Numbers" />
+</form>
+
+{% if contact_numbers %}
+<h3>Contact Numbers:</h3>
+<ul>
+    {% for number in contact_numbers %}
+
+    <li>{{ number }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<h2>Unassigned Patients</h2>
+
+<table border='1'>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+    </tr>
+    {% for patient in unassigned_patients %}
+    <tr>
+        <td>{{ patient.id }}</td>
+        <td>{{ patient.name }}</td>
+        <td>{{ patient.age }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Nurses with Specific Prescription</h2>
+
+<form action="/nurse_presp" method="post">
+    {% csrf_token %}
+    <label for="prescription">Enter Prescription: </label>
+    <input id="prescription" type="text" name="prescription" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+{% if nurses_pres %}
+<h3>Nurses:</h3>
+<ul>
+    {% for nurse in nurses_pres %}
+    <li>{{ nurse }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+
+<h2>Average Age of Patients</h2>
+<p>The average age of patients is: {{ average_age }}</p>
+
+<h2>Latest Patient</h2>
+{% if latest_patient %}
+<p>ID: {{ latest_patient.id }}</p>
+<p>Name: {{ latest_patient.name }}</p>
+<p>Age: {{ latest_patient.age }}</p>
+<p>Date Admitted: {{ latest_patient.date_admitted }}</p>
+{% else %}
+<p>No patients found.</p>
+{% endif %}
+
+
+<h2>Busy Doctors</h2>
+
+<table border='1'>
+    <tr>
+        <th>Name</th>
+        <th>Number of Patients</th>
+    </tr>
+    {% for doctor in busy_doctors %}
+    <tr>
+        <td>{{ doctor.name }}</td>
+        <td>{{ doctor.num_patients }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Long Term Patients</h2>
+
+<table border='1'>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Date Admitted</th>
+    </tr>
+    {% for patient in long_term_patients %}
+    <tr>
+        <td>{{ patient.id }}</td>
+        <td>{{ patient.name }}</td>
+        <td>{{ patient.age }}</td>
+        <td>{{ patient.date_admitted }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Nurse Patient Counts</h2>
+
+<table border='1'>
+    <tr>
+        <th>Name</th>
+        <th>Number of Patients</th>
+    </tr>
+    {% for nurse in nurse_patient_counts %}
+    <tr>
+        <td>{{ nurse.name }}</td>
+        <td>{{ nurse.num_patients }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Patients by Doctor</h2>
+
+<form action="/patients_by_doctor" method="post">
+    {% csrf_token %}
+    <label for="doctor_id">Select Doctor: </label>
+    <select id="doctor_id" name="doctor_id">
+        <option value="">--Select Doctor--</option>
+        {% for doctor in doctors %}
+        <option value="{{ doctor.id }}">{{ doctor.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Get Patients" />
+</form>
+
+{% if patient_names %}
+<h3>Patients:</h3>
+<ul>
+    {% for name in patient_names %}
+    <li>{{ name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<h2>Doctors by Specialization</h2>
+
+<form action="/specialization" method="post">
+    {% csrf_token %}
+    <label for="specialization">Enter Specialization: </label>
+    <input id="specialization" type="text" name="specialization" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+{% if specialized_doctors %}
+<h3>Specialized Doctors:</h3>
+<ul>
+    {% for doctor in specialized_doctors %}
+    <li>{{ doctor.name }} - {{ doctor.specialization }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Patients by Specialization</h2>
+
+<form action="/patients_by_specialization" method="post">
+    {% csrf_token %}
+    <label for="specialization">Enter Specialization: </label>
+    <input id="specialization" type="text" name="specialization" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+{% if patient_names %}
+<h3>Patients:</h3>
+<ul>
+    {% for name in patient_names %}
+    <li>{{ name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Unassigned Nurses</h2>
+
+<table border='1'>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+    </tr>
+    {% for nurse in unassigned_nurses %}
+    <tr>
+        <td>{{ nurse.id }}</td>
+        <td>{{ nurse.name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Latest Medical Record</h2>
+
+<form action="/latest_medical_record" method="post">
+    {% csrf_token %}
+    <label for="patient_id">Select Patient: </label>
+    <select id="patient_id" name="patient_id">
+        <option value="">--Select Patient--</option>
+        {% for patient in patients %}
+        <option value="{{ patient.id }}">{{ patient.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Get Latest Record" />
+</form>
+
+{% if latest_record %}
+<h3>Latest Record:</h3>
+<p>ID: {{ latest_record.id }}</p>
+<p>Diagnosis: {{ latest_record.diagnosis }}</p>
+<p>Prescription: {{ latest_record.prescription }}</p>
+<p>Date: {{ latest_record.date }}</p>
+{% else %}
+<p>No record found.</p>
+{% endif %}
+
+<h2>Patients with Specific Diagnosis</h2>
+
+<form action="/patients_with_diagnosis" method="post">
+    {% csrf_token %}
+    <label for="diagnosis">Enter Diagnosis: </label>
+    <input id="diagnosis" type="text" name="diagnosis" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+{% if patient_names %}
+<h3>Patients:</h3>
+<ul>
+    {% for name in patient_names %}
+    <li>{{ name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Doctors by Age Group</h2>
+
+<form action="/doctors_by_age_group" method="post">
+    {% csrf_token %}
+    <label for="min_age">Min Age: </label>
+    <input id="min_age" type="number" name="min_age" value="" />
+    <label for="max_age">Max Age: </label>
+    <input id="max_age" type="number" name="max_age" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+{% if doctors %}
+<h3>Doctors:</h3>
+<ul>
+    {% for doctor in doctors %}
+    <li>{{ doctor.name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Patients with Specific Prescription</h2>
+
+<form action="/patients_with_prescription" method="post">
+    {% csrf_token %}
+    <label for="prescription">Enter Prescription: </label>
+    <input id="prescription" type="text" name="prescription" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+{% if patients %}
+<h3>Patients:</h3>
+<ul>
+    {% for patient in patients %}
+    <li>{{ patient.name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Nurses by Patient Age</h2>
+
+<form action="/nurses_by_patient_age" method="post">
+    {% csrf_token %}
+    <label for="age">Enter Age: </label>
+    <input id="age" type="number" name="age" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+{% if nurses %}
+<h3>Nurses:</h3>
+<ul>
+    {% for nurse in nurses %}
+    <li>{{ nurse.name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Total Medical Records</h2>
+<p>Total number of medical records: {{ total_records }}</p>
+
+<h2>Patients by Nurse Contact</h2>
+
+<form action="/patients_by_nurse_contact" method="post">
+    {% csrf_token %}
+    <label for="contact_number">Enter Nurse Contact Number: </label>
+    <input id="contact_number" type="text" name="contact_number" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+{% if patient_names %}
+<h3>Patients:</h3>
+<ul>
+    {% for name in patient_names %}
+    <li>{{ name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Patients with Multiple Doctors</h2>
+
+{% if patients %}
+<table border='1'>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+    </tr>
+    {% for patient in patients %}
+    <tr>
+        <td>{{ patient.id }}</td>
+        <td>{{ patient.name }}</td>
+        <td>{{ patient.age }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No patients found.</p>
+{% endif %}
+
+<h2>Doctors by Prescription</h2>
+
+<form action="/doctors_by_prescription" method="post">
+    {% csrf_token %}
+    <label for="prescription">Enter Prescription: </label>
+    <input id="prescription" type="text" name="prescription" value="" />
+    <input type="submit" value="Search" />
+</form>
+
+{% if doctor_names %}
+<h3>Doctors:</h3>
+<ul>
+    {% for name in doctor_names %}
+    <li>{{ name }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+{% endblock %}
