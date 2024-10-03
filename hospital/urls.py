@@ -44,4 +44,7 @@ urlpatterns = [
     path("patients_by_nurse_contact", include("api.urls")),
     path("patients_with_multiple_doctors", include("api.urls")),
     path("doctors_by_prescription", include("api.urls")),
+    path("unassigned_doctor_patients", include("api.urls")),
+    path("doctors_by_admission_date", include("api.urls")),
+    path("patients_per_month", include("api.urls")),
 ]
