@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Home</h1>
+<p>Welcome to the home page!</p>
+
+{% if patients_with_doctors_nurses %}
+<h2>Patients with doctors and nurses</h2>
+<ul>
+    {% for patient in patients_with_doctors_nurses %}
+    <li>{{ patient.name }} {{ patient.age }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+{% if patients_admitted_after_date %}
+<h2>Patients admitted after 2024-10-02</h2>
+<ul>
+    {% for patient in patients_admitted_after_date %}
+    <li>{{ patient.name }} {{ patient.age }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Total Patients</h2>
+<p>{{ total_patients }}</p>
+
+
+<h2>Patients with Specific Age 32</h2>
+<h2>Total Paients</h2>
+<p>{{ total_age_count }}</p>
+{% if total_patients_with_age %}
+{% for patient in total_patients_with_age %}
+<p>{{ patient.name }} {{ patient.age }}</p>
+{% endfor %}
+{% else %}
+<p>No patients with this age</p>
+{% endif %}
+
+
+<h1>Total Age Sum</h1>
+<p>{{ total_age_sum }}</p>
+
+<h1>Patients with Doctor Counts</h1>
+{% for patient in patients_with_doctor_counts %}
+<p>{{ patient.name }} | {{ patient.doctor_count }}</p>
+{% endfor %}
+
+
+<h2>Patients with Medical Records</h2>
+{% for patient in patients_with_medical_records %}
+<p>{{ patient.name }} | {{ patient.age }}</p>
+{% endfor %}
+
+
+<h2>Patients with Nurse Counts</h2>
+{% if patients_with_nurse_counts %}
+{% for patient in patients_with_nurse_counts %}
+<p>{{ patient.name }} | {{ patient.nurse_count }}</p>
+{% endfor %}
+{% else %}
+<p>No patients with nurses</p>
+{% endif %}
+
+{% if patients_with_nurses_and_contacts %}
+<h2>Patients with Nurses and Contacts</h2>
+{% for patient in patients_with_nurses_and_contacts %}
+<p>{{ patient.name }} | {{ patient.nurse }}</p>
+{% endfor %}
+{% else %}
+<p>No patients with nurses and contacts</p>
+{% endif %}
+
+{% if patients_with_medical_record_counts %}
+<h2>Patients with Medical Record Counts</h2>
+{% for patient in patients_with_medical_record_counts %}
+<p>{{ patient.name }} | {{ patient.medical_record_count }}</p>
+{% endfor %}
+{% else %}
+<p>No patients with medical records</p>
+{% endif %}
+
+{% if total_patients_admitted_in_year %}
+<h2>Total Patients Admitted in 2024</h2>
+<p>{{ total_patients_admitted_in_year }}</p>
+{% else %}
+<p>No patients admitted in 2024</p>
+{% endif %}
+
+{% if doctors_with_patient_counts %}
+<h2>Doctors with Patient Counts</h2>
+{% for doctor in doctors_with_patient_counts %}
+<p>{{ doctor.name }} | {{ doctor.patient_count }}</p>
+{% endfor %}
+{% else %}
+<p>No doctors with patients</p>
+{% endif %}
+
+
+<h2>Avg Patient age</h2>
+<p>{{average_patient_age}}</p>
+
+<h2>Maximum Age</h2>
+
+<p>{{max_patient_age}}</p>
+
+<h2>Minimum Age</h2>
+
+<p>{{min_patient_age}}</p>
+
+<h2>Earliest Admission Date</h2>
+
+<p>{{earliest_admission_date.date_admitted}}</p>
+
+
+<h2>Doctors with patients</h2>
+{% for doctor in doctors_with_patients %}
+<p> {{ doctor }}</p>
+{% endfor %}
+
+
+
+<h2>Nurses with patients</h2>
+{% for nurse in nurses_with_patients %}
+<p> {{ nurse }}</p>
+{% endfor %}
+
+{% if patients_with_distinct_doctor_counts %}
+<h2>Patients with distinct doctor counts</h2>
+{% for patient in patients_with_distinct_doctor_counts %}
+<p>{{ patient.name }} | {{ patient.doctor_count }}</p>
+{% endfor %}
+{% else %}
+<p>No patients with distinct doctors</p>
+{% endif %}
+
+
+{% endblock %}

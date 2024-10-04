@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, Max, Min, Sum
 from django.db.models.functions import TruncMonth
 from django.shortcuts import render
 from django.utils import timezone
@@ -713,3 +713,108 @@ def doctors_by_diagnosis_and_age_group_names(request):
         doctor_names = []
 
     return render(request, "index.html", {"doctor_names": doctor_names})
+
+
+@csrf_exempt
+def home(request):
+
+    patients_with_doctors_nurses = Patient.objects.prefetch_related(
+        "doctor", "nurse"
+    ).all()
+
+    specific_date = timezone.datetime(2024, 10, 2)
+    patients_admitted_after_date = Patient.objects.filter(
+        date_admitted__gt=specific_date
+    )
+
+    total_patients = Patient.objects.count()
+
+    specific_age = 32
+    total_patients_with_age = Patient.objects.filter(age=specific_age)
+
+    total_age_count = total_patients_with_age.count()
+
+    total_age_sum = Patient.objects.aggregate(Sum("age"))
+
+    patients_with_doctor_counts = Patient.objects.annotate(
+        doctor_count=Count("doctor")
+    ).all()
+
+    patients_with_medical_records = Patient.objects.prefetch_related(
+        "medical_records"
+    ).all()
+
+    patients_with_nurses_and_contacts = Patient.objects.prefetch_related("nurse").all()
+
+    patients_with_medical_record_counts = Patient.objects.annotate(
+        medical_record_count=Count("medical_records")
+    ).all()
+
+    # patients_with_diagnoses_prescriptions = Patient.objects.prefetch_related(
+    # "medical_records"
+    # ).all()
+
+    specific_year = 2024
+    total_patients_admitted_in_year = Patient.objects.filter(
+        date_admitted__year=specific_year
+    ).count()
+
+    # patients_with_doctor_specializations = Patient.objects.prefetch_related(
+    #     "doctor"
+    # ).all()
+
+    doctors_with_patient_counts = Doctor.objects.annotate(
+        patient_count=Count("patients")
+    ).all()
+
+    # patients_with_nurse_counts = Patient.objects.annotate(
+    #     nurse_count=Count("nurse")
+    # ).all()
+
+    average_patient_age = Patient.objects.aggregate(
+        average_age=Sum("age") / Count("id")
+    )
+
+    max_patient_age = Patient.objects.aggregate(max_age=Max("age"))
+
+    min_patient_age = Patient.objects.aggregate(min_age=Min("age"))
+
+    earliest_admission_date = Patient.objects.order_by("date_admitted").first()
+
+    doctors_with_patients = Doctor.objects.prefetch_related("patients").all()
+
+    nurses_with_patients = Nurse.objects.prefetch_related("patients").all()
+
+    patients_with_distinct_doctor_counts = Patient.objects.annotate(
+        distinct_doctor_count=Count("doctor", distinct=True)
+    ).all()
+
+    return render(
+        request,
+        "home.html",
+        {
+            "patients_with_doctors_nurses": patients_with_doctors_nurses,
+            "patients_admitted_after_date": patients_admitted_after_date,
+            "total_patients": total_patients,
+            "total_age_count": total_age_count,
+            "total_patients_with_age": total_patients_with_age,
+            "total_age_sum": total_age_sum,
+            "patients_with_doctor_counts": patients_with_doctor_counts,
+            "patients_with_medical_records": patients_with_medical_records,
+            "patients_with_nurses_and_contacts": patients_with_nurses_and_contacts,
+            "patients_with_medical_record_counts": patients_with_medical_record_counts,
+            # "patients_with_diagnoses_prescriptions": patients_with_diagnoses_prescriptions,
+            "total_patients_admitted_in_year": total_patients_admitted_in_year,
+            # "patients_with_doctor_specializations": patients_with_doctor_specializations,
+            "patients_with_medical_record_counts": patients_with_medical_record_counts,
+            "doctors_with_patient_counts": doctors_with_patient_counts,
+            # "patients_with_nurse_counts": patients_with_nurse_counts,
+            "average_patient_age": average_patient_age,
+            "max_patient_age": max_patient_age,
+            "min_patient_age": min_patient_age,
+            "earliest_admission_date": earliest_admission_date,
+            "doctors_with_patients": doctors_with_patients,
+            "nurses_with_patients": nurses_with_patients,
+            "patients_with_distinct_doctor_counts": patients_with_distinct_doctor_counts,
+        },
+    )

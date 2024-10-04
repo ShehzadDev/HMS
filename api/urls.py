@@ -15,6 +15,7 @@ from .views import (
     doctors_by_prescription,
     doctors_with_long_term_patients,
     doctors_with_specific_prescription,
+    home,
     index,
     latest_medical_record,
     latest_patient,
@@ -52,6 +53,7 @@ from .views import (
 )
 
 urlpatterns = [
+    path("home/", home, name="home"),
     path("", index, name="index"),
     path("diagnosis", diagnosis, name="diagnosis"),
     path("patients", patients, name="patients"),
