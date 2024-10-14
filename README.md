@@ -215,3 +215,126 @@ patients__age__lte=max_age,
 ).distinct()
 .values_list("name", flat=True)
 ```
+
+
+
+Select all patients with their associated doctors and nurses.
+```bash
+Patient.objects.prefetch_related("doctor", "nurse").all()
+```
+
+Select all patients admitted after a specific date.
+```bash
+Patient.objects.filter(date_admitted__gt=specific_date)
+```
+3. Count the total number of patients.
+```bash
+Patient.objects.count()
+```
+
+Count the total number of patients with a specific age.
+```bash
+Patient.objects.filter(age=specific_age).count()
+```
+
+Select all patients with their associated doctors and nurses.
+```bash
+Patient.objects.prefetch_related("doctor", "nurse").all()
+```
+
+Count the total number of doctors associated with each patient.
+```bash
+Patient.objects.annotate(doctor_count=Count("doctor")).all()
+```
+
+Sum the ages of all patients.
+```bash
+Patient.objects.aggregate(Sum("age"))
+```
+
+Select all patients along with the number of doctors associated with each.
+```bash
+Patient.objects.annotate(doctor_count=Count("doctor")).all()
+```
+
+Select all patients along with their medical records, if available.
+```bash
+Patient.objects.prefetch_related("medical_records").all()
+```
+Count the total number of nurses associated with each patient.
+```bash
+Patient.objects.annotate(nurse_count=Count("nurse")).all()
+```
+
+Select all patients with their associated nurses and the nurses' contact numbers.
+```bash
+Patient.objects.prefetch_related("nurse").all()
+```
+
+Select all patients along with the total number of medical records for each.
+```bash
+Patient.objects.annotate(medical_record_count=Count("medical_records")).all()
+```
+
+Select all patients with their diagnoses and prescriptions, if available.
+```bash
+Patient.objects.prefetch_related("medical_records").all()
+```
+
+Count the total number of patients admitted in a specific year.
+```bash
+Patient.objects.filter(date_admitted__year=specific_year).count()
+```
+
+Select all patients along with their doctors' specializations.
+```bash
+Patient.objects.prefetch_related("doctor").all()
+```
+Select all patients along with the count of medical records for each.
+```bash
+Patient.objects.annotate(medical_record_count=Count("medical_records")).all()
+```
+
+Select all doctors with the count of patients they are associated with.
+```bash
+Doctor.objects.annotate(patient_count=Count("patients")).all()
+```
+
+Select all patients along with the count of nurses they are associated with.
+```bash
+Patient.objects.annotate(nurse_count=Count("nurse")).all()
+```
+
+Annotate the average age of patients.
+```bash
+Patient.objects.aggregate(average_age=Avg("age"))
+```
+
+Annotate the maximum age of patients.
+```bash
+Patient.objects.aggregate(max_age=Max("age"))
+```
+
+Annotate the minimum age of patients.
+```bash
+Patient.objects.aggregate(min_age=Min("age"))
+```
+
+Select all patients along with the earliest admission date.
+```bash
+Patient.objects.order_by("date_admitted").first()
+```
+
+Select all doctors with their associated patients prefetched.
+```bash
+Doctor.objects.prefetch_related("patients").all()
+```
+
+Select all nurses with their associated patients prefetched.
+```bash
+Nurse.objects.prefetch_related("patients").all()
+```
+Select all patients along with the count of distinct doctors they are associated with.
+```bash
+Patient.objects.annotate(distinct_doctor_count=Count("doctor", distinct=True)).all()
+```
